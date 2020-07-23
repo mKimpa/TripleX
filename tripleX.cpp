@@ -16,6 +16,14 @@ int main()
 
     showPasswordHint(CodeSum, CodeProduct); 
 
+    int GuessA, GuessB, GuessC;
+    std::cin >> GuessA;
+    std::cin >> GuessB;
+    std::cin >> GuessC;
+
+    int GuessSum = GuessA + GuessB + GuessC;
+    int GuessProduct = GuessA * GuessB * GuessC;
+
     return 0;
 }
 
