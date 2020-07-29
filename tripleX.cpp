@@ -1,20 +1,94 @@
 # include <iostream>
+# include <ctime>
 
-void showIntro();
-void showPasswordHint(int Sum, int Product);
+void ShowIntro(int Difficulty, int Attempts);
+bool PlayGame(int Difficulty, int Attempts);
+void ShowPasswordHint(int Sum, int Product);
+void ShowWinMessage();
+void ShowLoseMessage();
 
 int main()
 {
-    showIntro();
+    srand(time(NULL));
+    const int MaxDifficulty = 4;
+    int CodeInputAttemps = 3;
+    int LevelDifficulty = 1;
+    while (true)
+    {       
+        bool bLevelComplete = PlayGame(LevelDifficulty, CodeInputAttemps);
+        std::cin.clear();
+        std::cin.ignore();
+        if (bLevelComplete)
+        {
+            if (LevelDifficulty == MaxDifficulty)
+            {
+                ShowWinMessage();
+                break;
+            }
+            ++LevelDifficulty;
+        }
+        else
+        {
+            --CodeInputAttemps;
+            if (CodeInputAttemps == 0)
+            {
+                ShowLoseMessage();
+                break;
+            }
 
-    const int CodeA = 4;
-    const int CodeB = 5;
-    const int CodeC = 6;
+        }
+        
+    }
+    
+    return 0;
+}
+
+void ShowWinMessage()
+{
+    system("cls");
+    std::cout << "================\n";
+    std::cout << "=   SUCCESS   ==\n";
+    std::cout << "================\n";
+}
+
+void ShowLoseMessage()
+{
+    system("cls");
+    std::cout << "================\n";
+    std::cout << "=    FAIL!    ==\n";
+    std::cout << "================\n";
+}
+
+void ShowIntro(int Difficulty, int Attempts)
+{
+    system("cls");
+    std::cout << "You are a secret agent breaking into a secure server room...\n";
+    std::cout << "Secure level: " << Difficulty << "\n";
+    std::cout << "Attempts left: "<< Attempts << "\n";
+    std::cout << "Enter the correct code to continue...\n";
+    std::cout << "_____________________________________________________________";
+}
+
+void ShowPasswordHint(int Sum, int Product)
+{
+    std::cout << std::endl;
+    std::cout << " ### There are 3 numbers in the code ### " << std::endl;
+    std::cout << " ### The codes add-up  to: " << Sum << std::endl;
+    std::cout << " ### The codes product is: " << Product << std::endl;
+}
+
+bool PlayGame(int Difficulty, int Attempts)
+{
+    ShowIntro(Difficulty, Attempts);
+
+    const int CodeA = (rand() % Difficulty + 1) + 1;
+    const int CodeB = (rand() % Difficulty + 1) + 1;
+    const int CodeC = (rand() % Difficulty + 1) + 1;
 
     const int CodeSum = CodeA + CodeB + CodeC;
     const int CodeProduct = CodeA * CodeB * CodeC;
 
-    showPasswordHint(CodeSum, CodeProduct); 
+    ShowPasswordHint(CodeSum, CodeProduct); 
 
     int GuessA, GuessB, GuessC;
     std::cin >> GuessA;
@@ -24,19 +98,11 @@ int main()
     int GuessSum = GuessA + GuessB + GuessC;
     int GuessProduct = GuessA * GuessB * GuessC;
 
-    return 0;
-}
-
-void showIntro()
-{
-    std::cout << "You are a secret agent breaking into a secure server room..." << std::endl;
-    std::cout << "Enter the correct code to continue..." << std::endl;
-}
-
-void showPasswordHint(int Sum, int Product)
-{
-    std::cout << std::endl;
-    std::cout << " ··· There are 3 numbers inthe code ··· " << std::endl;
-    std::cout << " ··· The codes add-up  to: " << Sum << std::endl;
-    std::cout << " ··· The codes product is: " << Product << std::endl;
+    if ((GuessSum == CodeSum) && (GuessProduct == CodeProduct))
+    {
+        std::cout <<"Correct Code! \n";
+        return true;
+    }   
+    std::cout << "Nope...\n";  
+    return false;
 }
